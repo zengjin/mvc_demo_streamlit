@@ -1,1 +1,1 @@
-{"_default": {"1": {"username": "tom", "role": "Admin", "name": "Tom", "email": "Tom@gmail.com"}, "2": {"username": "Jerry", "role": "Admin", "name": "Jerry", "email": "Jerry@gmail.com"}}}
+{"_default": {"2": {"username": "tom", "role": "Admin", "name": "tom", "email": "tom@gmai.com", "password": "1234"}}}

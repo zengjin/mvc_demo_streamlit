@@ -5,12 +5,27 @@ class UserController:
     @staticmethod
     def render_login():
         st.title("🔐 系统登录")
-        user = st.text_input("请输入用户名登录 (任意名称)")
+        username = st.text_input("用户名")
+        password = st.text_input("密码", type="password")
         if st.button("进入系统"):
-            if user:
+            if username == "admin" and password == "admin":
                 st.session_state.logged_in = True
-                st.session_state.user = user
+                st.session_state.user = username
+                st.session_state.role = "Admin"
                 st.rerun()
+            elif username and password:
+                # For other users, check username and password in database
+                users = UserModel.get_all()
+                user_data = next((u for u in users if u['username'] == username), None)
+                if user_data and user_data.get('password') == password:
+                    st.session_state.logged_in = True
+                    st.session_state.user = username
+                    st.session_state.role = user_data.get('role', 'Viewer')
+                    st.rerun()
+                else:
+                    st.error("用户名或密码错误")
+            else:
+                st.error("请输入用户名和密码")
 
     @staticmethod
     def render_user_mgmt():
@@ -22,8 +37,9 @@ class UserController:
             role = st.selectbox("角色", ["Admin", "Editor", "Viewer"], key="add_role")
             name = st.text_input("姓名")
             email = st.text_input("邮箱地址")
+            password = st.text_input("密码", type="password")
             if st.button("提交"):
-                if username and UserModel.add_user(username, role, name, email):
+                if username and UserModel.add_user(username, role, name, email, password):
                     st.success(f"用户 {username} 已添加")
                     st.rerun()
                 else:
@@ -45,8 +61,9 @@ class UserController:
                 new_role = st.selectbox("角色", ["Admin", "Editor", "Viewer"], index=["Admin", "Editor", "Viewer"].index(u['role']), key=f"role_{u['username']}")
                 new_name = st.text_input("姓名", value=u.get('name', ''), key=f"name_{u['username']}")
                 new_email = st.text_input("邮箱地址", value=u.get('email', ''), key=f"email_{u['username']}")
+                new_password = st.text_input("密码", type="password", key=f"password_{u['username']}")
                 if st.button("更新", key=f"update_{u['username']}"):
-                    UserModel.update_user(u['username'], role=new_role, name=new_name, email=new_email)
+                    UserModel.update_user(u['username'], role=new_role, name=new_name, email=new_email, password=new_password)
                     st.success(f"用户 {u['username']} 已更新")
                     st.rerun()
                 
