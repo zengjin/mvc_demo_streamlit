@@ -39,8 +39,9 @@ class UserController:
             name = st.text_input(get_text('name'), key="add_name")
             email = st.text_input(get_text('email'), key="add_email")
             password = st.text_input(get_text('password'), type="password", key="add_password")
+            resume = st.text_area(get_text('resume'), key="add_resume")
             if st.button(get_text('submit'), key="add_submit"):
-                if username and UserModel.add_user(username, role, name, email, password):
+                if username and UserModel.add_user(username, role, name, email, password, resume):
                     st.success(get_text('add_success', username))
                     st.rerun()
                 else:
@@ -56,6 +57,7 @@ class UserController:
                 col2.write(get_text('role_label', u['role']))
                 col3.write(get_text('name_label', u.get('name', '')))
                 st.write(get_text('email_label', u.get('email', '')))
+                st.write(get_text('resume_label', u.get('resume', '')))
                 
                 # Edit form
                 st.subheader(get_text('edit_title'))
@@ -65,8 +67,9 @@ class UserController:
                 new_name = st.text_input(get_text('name'), value=u.get('name', ''), key=f"name_{u['username']}")
                 new_email = st.text_input(get_text('email'), value=u.get('email', ''), key=f"email_{u['username']}")
                 new_password = st.text_input(get_text('password'), type="password", key=f"password_{u['username']}")
+                new_resume = st.text_area(get_text('resume'), value=u.get('resume', ''), key=f"resume_{u['username']}")
                 if st.button(get_text('update'), key=f"update_{u['username']}"):
-                    UserModel.update_user(u['username'], role=new_role, name=new_name, email=new_email, password=new_password)
+                    UserModel.update_user(u['username'], role=new_role, name=new_name, email=new_email, password=new_password, resume=new_resume)
                     st.success(get_text('update_success', u['username']))
                     st.rerun()
                 

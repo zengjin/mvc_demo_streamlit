@@ -12,14 +12,14 @@ class UserModel:
         return db.all()
 
     @staticmethod
-    def add_user(username, role, name='', email='', password=''):
+    def add_user(username, role, name='', email='', password='', resume=''):
         if not db.search(User.username == username):
-            db.insert({'username': username, 'role': role, 'name': name, 'email': email, 'password': password})
+            db.insert({'username': username, 'role': role, 'name': name, 'email': email, 'password': password, 'resume': resume})
             return True
         return False
 
     @staticmethod
-    def update_user(username, new_username=None, role=None, name=None, email=None, password=None):
+    def update_user(username, new_username=None, role=None, name=None, email=None, password=None, resume=None):
         update_data = {}
         if new_username is not None:
             update_data['username'] = new_username
@@ -31,6 +31,8 @@ class UserModel:
             update_data['email'] = email
         if password is not None:
             update_data['password'] = password
+        if resume is not None:
+            update_data['resume'] = resume
         db.update(update_data, User.username == username)
         return True
 
