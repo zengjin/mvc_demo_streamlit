@@ -12,12 +12,26 @@ class UserModel:
         return db.all()
 
     @staticmethod
-    def add_user(username, role):
+    def add_user(username, role, name='', email=''):
         if not db.search(User.username == username):
-            db.insert({'username': username, 'role': role})
+            db.insert({'username': username, 'role': role, 'name': name, 'email': email})
             return True
         return False
 
     @staticmethod
-    def delete_user(username):
-        db.remove(User.username == username)
+    def update_user(username, new_username=None, role=None, name=None, email=None):
+        update_data = {}
+        if new_username is not None:
+            update_data['username'] = new_username
+        if role is not None:
+            update_data['role'] = role
+        if name is not None:
+            update_data['name'] = name
+        if email is not None:
+            update_data['email'] = email
+        db.update(update_data, User.username == username)
+        return True
+
+    @staticmethod
+    def get_user(username):
+        return db.search(User.username == username)

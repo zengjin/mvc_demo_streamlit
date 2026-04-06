@@ -1,1 +1,2 @@
-streamlit\ntinydb
+streamlit
+tinydb
