@@ -33,5 +33,9 @@ class UserModel:
         return True
 
     @staticmethod
+    def delete_user(username):
+        db.remove(User.username == username)
+
+    @staticmethod
     def get_user(username):
         return db.search(User.username == username)
